@@ -1,0 +1,17 @@
+{
+  "name": "penpot",
+  "private": true,
+  "scripts": {
+    "start": "bash scripts/start.sh",
+    "stop": "npm run helm:uninstall && npm run db:local:down",
+    "status": "docker compose ps && helm status my-release && kubectl get pods",
+    "db:local": "docker compose -f docker-compose.yml up -d --wait",
+    "db:local:down": "docker compose -f docker-compose.yml down",
+    "db:local:logs": "docker compose -f docker-compose.yml logs -f",
+    "helm:repo": "helm repo add penpot https://helm.penpot.app --force-update && helm repo update penpot",
+    "helm:install": "helm upgrade --install my-release penpot/penpot -f values.yaml",
+    "helm:uninstall": "helm uninstall my-release",
+    "helm:status": "helm status my-release",
+    "seed": "bash scripts/seed.sh"
+  }
+}

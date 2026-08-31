@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    stop_signal: SIGINT
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_INITDB_ARGS: --data-checksums
+      POSTGRES_DB: penpot
+      POSTGRES_USER: penpot
+      POSTGRES_PASSWORD: penpot
+    volumes:
+      - penpot_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpot -d penpot"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+
+  redis:
+    image: redis:7.2
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    command:
+      - redis-server
+      - --maxmemory
+      - 128mb
+      - --maxmemory-policy
+      - volatile-lfu
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+
+volumes:
+  penpot_postgres_data:

@@ -1,0 +1,4 @@
+# One user per line: email[,fullname[,password]]
+# Password must be at least 8 characters. Omitted password uses penpot1234.
+alice@example.com,Alice Example,penpot1234
+bob@example.com,Bob Example
